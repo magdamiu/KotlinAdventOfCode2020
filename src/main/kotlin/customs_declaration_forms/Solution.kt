@@ -11,32 +11,31 @@ const val SPLIT_BY_N = "\n"
 const val INPUT_FILE_FORMS = "src/main/kotlin/customs_declaration_forms/input.txt"
 
 fun main() {
-    val fullText = readFileDirectlyAsText(INPUT_FILE_FORMS)
-    val listOfAnswers = processTheTextFromFile(fullText)
+    val fullText = readContentFromFile(INPUT_FILE_FORMS)
+    val listOfAnswers = processTheContentOfFile(fullText)
 
-    println(countAnyYesAnswers(listOfAnswers))
+    println(firstPart(listOfAnswers))
     println(countAllYesAnswers(fullText))
 }
 
-private fun readFileDirectlyAsText(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
+private fun readContentFromFile(fileName: String) = File(fileName).readText().trim().split(SPLIT_BY_LINE)
 
-private fun processTheTextFromFile(fullText: String): List<String> {
+private fun processTheContentOfFile(fullText: List<String>): List<String> {
     val processedListOfAnswers = mutableListOf<String>()
-    fullText.split(SPLIT_BY_LINE).forEach {
+    fullText.forEach {
         processedListOfAnswers.add(it.replace(SPLIT_BY_N, EMPTY_SPACE))
     }
     return processedListOfAnswers
 }
 
-private fun countAnyYesAnswers(listOfAnswers: List<String>): Int {
+private fun firstPart(listOfAnswers: List<String>): Int {
     return listOfAnswers.sumBy { answer ->
         answer.filter { !it.isWhitespace() }.toCharArray().distinct().size
     }
 }
 
-private fun countAllYesAnswers(fullText: String): Int {
-    return fullText.trim()
-        .split(SPLIT_BY_LINE)
+private fun countAllYesAnswers(fullText: List<String>): Int {
+    return fullText
         .map { it.split(SPLIT_BY_N) }
         .map { lines -> lines.map { it.toSet() }.reduce { a, b -> a.intersect(b) } }
         .sumBy { it.size }
