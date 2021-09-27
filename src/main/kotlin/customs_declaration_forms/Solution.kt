@@ -15,7 +15,7 @@ fun main() {
     val listOfAnswers = processTheContentOfFile(fullText)
 
     println(firstPart(listOfAnswers))
-    println(countAllYesAnswers(fullText))
+    println(secondPart(fullText))
 }
 
 private fun readContentFromFile(fileName: String) = File(fileName).readText().trim().split(SPLIT_BY_LINE)
@@ -29,14 +29,14 @@ private fun processTheContentOfFile(fullText: List<String>): List<String> {
 }
 
 private fun firstPart(listOfAnswers: List<String>): Int {
-    return listOfAnswers.sumBy { answer ->
+    return listOfAnswers.sumOf { answer ->
         answer.filter { !it.isWhitespace() }.toCharArray().distinct().size
     }
 }
 
-private fun countAllYesAnswers(fullText: List<String>): Int {
+private fun secondPart(fullText: List<String>): Int {
     return fullText
         .map { it.split(SPLIT_BY_N) }
         .map { lines -> lines.map { it.toSet() }.reduce { a, b -> a.intersect(b) } }
-        .sumBy { it.size }
+        .sumOf { it.size }
 }
