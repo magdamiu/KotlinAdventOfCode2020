@@ -20,17 +20,12 @@ fun main() {
 
 private fun readContentFromFile(fileName: String) = File(fileName).readText().trim().split(SPLIT_BY_LINE)
 
-private fun processTheContentOfFile(fullText: List<String>): List<String> {
-    val processedListOfAnswers = mutableListOf<String>()
-    fullText.forEach {
-        processedListOfAnswers.add(it.replace(SPLIT_BY_N, EMPTY_SPACE))
-    }
-    return processedListOfAnswers
-}
+private fun processTheContentOfFile(fullText: List<String>) =
+    fullText.map { it.replace(SPLIT_BY_N, EMPTY_SPACE) }.toList()
 
 private fun firstPart(listOfAnswers: List<String>): Int {
     return listOfAnswers.sumOf { answer ->
-        answer.filter { !it.isWhitespace() }.toCharArray().distinct().size
+        answer.filter { !it.isWhitespace() }.toSet().size
     }
 }
 
